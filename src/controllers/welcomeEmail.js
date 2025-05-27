@@ -13,262 +13,48 @@ const welcomeEmail = async (req, res) => {
     }
 
     const emailHtml = `
-      <div
-  lang="en-IN"
-  link="#0563c1"
-  vlink="#800000"
-  dir="ltr"
-  style="
-    font-family: 'Times New Roman', serif;
-    font-size: 12pt;
-    color: #000;
-    background: #fff;
-  "
->
-   <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    <strong>Dear ${userName},</strong>
-  </p>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    Congratulations, and thank you for taking the first step in a journey that's
-    not just about returns — but about
-    <em>responsibility, recognition, and real impact</em>.
-  </p>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    Your investment of <strong>Rs. 30,000</strong> into PMatts Community Shares
-    has been successfully acknowledged. You are now officially a
-    <strong>Founding Community Shareholder</strong> in a movement that is
-    building India's most people-powered innovation platform.
-  </p>
-  <p style="line-height: 108%; margin-bottom: 0in; text-align: left">
-    <img
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAloAAAACCAYAAACAGXJZAAAAJ0lEQVRYhe3OAQkAMAwDsH3+RdTpbuJwGImCnCRTAAA8178DAABbXTzSAuMKrc/IAAAAAElFTkSuQmCC"
-      name="Shape4"
-      alt="Shape4"
-      align="bottom"
-      width="602"
-      height="2"
-    />
-  </p>
-  <h3
-    style="
-      line-height: 100%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-      font-size: 13pt;
-      font-weight: bold;
-    "
-  >
-    🌱 What You've Just Joined:
-  </h3>
-  <ul style="margin-left: 1em">
-    <li
-      style="
-        line-height: 100%;
-        margin-top: 0.19in;
-        margin-bottom: 0in;
-        text-align: left;
-      "
-    >
-      <strong>Missing Matters</strong>: AI-powered smart boxes solving lost
-      &amp; found problems nationwide
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0in; text-align: left">
-      <strong>MiniVersion</strong>: A hyperlocal digital economy that empowers
-      local sellers, job seekers &amp; renters
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0.19in; text-align: left">
-      Future-ready projects that combine tech, impact, and nation-building
-    </li>
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; padding: 20px; max-width: 800px; margin: auto;">
+  <h2 style="color: #007BFF; text-align: center;">🎉 Congratulations, and Thank You!</h2>
+  <p>Dear <strong>${userName}</strong>,</p>
+  <p>You've taken the first step in a journey that's not just about returns—but about <strong>responsibility, recognition, and real impact.</strong></p>
+
+  <p>You are now officially a <strong>🏆 PMatts Community Member</strong> in a movement that is building <strong>India's most people-powered innovation platform. 🌱</strong></p>
+
+  <h3 style="color: #007BFF;">🚀 What You've Just Joined:</h3>
+  <ul style="padding-left: 20px;">
+    <li>🏷 <strong>Missing Matters</strong> – AI-powered smart boxes solving lost & found problems nationwide</li>
+    <li>🏡 <strong>MiniVersion</strong> – A hyperlocal digital economy that empowers local sellers, job seekers & renters</li>
+    <li>🌟 <strong>Future-ready projects</strong> that combine <strong>tech, impact, and nation-building</strong></li>
   </ul>
-  <p style="line-height: 108%; margin-bottom: 0in; text-align: left">
-    <img
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAloAAAACCAYAAACAGXJZAAAAJ0lEQVRYhe3OAQkAMAwDsH3+RdTpbuJwGImCnCRTAAA8178DAABbXTzSAuMKrc/IAAAAAElFTkSuQmCC"
-      name="Shape5"
-      alt="Shape5"
-      align="bottom"
-      width="602"
-      height="2"
-    />
-  </p>
-  <h3
-    style="
-      line-height: 100%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-      font-size: 13pt;
-      font-weight: bold;
-    "
-  >
-    📄 What You Will Receive:
-  </h3>
-  <ul style="margin-left: 1em">
-    <li
-      style="
-        line-height: 100%;
-        margin-top: 0.19in;
-        margin-bottom: 0in;
-        text-align: left;
-      "
-    >
-      Your <strong>digitally signed Community Share Agreement</strong>
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0in; text-align: left">
-      Your <strong>Community Share Certificate</strong>
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0in; text-align: left">
-      Access to our <strong>investor update channel</strong>
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0in; text-align: left">
-      Priority access to future PMatts startup launches
-    </li>
-    <li style="line-height: 100%; margin-bottom: 0.19in; text-align: left">
-      Referral rewards of <strong>Rs. 3,000</strong> for every new investor you
-      bring in
-    </li>
+
+  <h3 style="color: #007BFF;">📜 What You Will Receive:</h3>
+  <ul style="padding-left: 20px;">
+    <li>✅ <strong>Digitally signed</strong> Community Share Agreement</li>
+    <li>✅ <strong>Official Community Share Certificate</strong></li>
+    <li>✅ <strong>Exclusive access</strong> to our investor update channel</li>
+    <li>✅ <strong>Priority entry</strong> to future PMatts startup launches</li>
+    <li>✅ <strong>Referral rewards</strong> of Rs. 3,000 for every new investor you bring in</li>
   </ul>
-  <p style="line-height: 108%; margin-bottom: 0in; text-align: left">
-    <img
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAloAAAACCAYAAACAGXJZAAAAJ0lEQVRYhe3OAQkAMAwDsH3+RdTpbuJwGImCnCRTAAA8178DAABbXTzSAuMKrc/IAAAAAElFTkSuQmCC"
-      name="Shape6"
-      alt="Shape6"
-      align="bottom"
-      width="602"
-      height="2"
-    />
-  </p>
-  <h3
-    style="
-      line-height: 100%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-      font-size: 13pt;
-      font-weight: bold;
-    "
-  >
-    📈 Your Returns:
-  </h3>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    Your returns are milestone-based, not fixed — just like real business.
-    You'll be updated at each stage of project monetization and success.<br />And
-    yes — you'll always be first in line for rewards, recognition, and
-    reinvestment rounds.
-  </p>
-  <p style="line-height: 108%; margin-bottom: 0in; text-align: left">
-    <img
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAloAAAACCAYAAACAGXJZAAAAJ0lEQVRYhe3OAQkAMAwDsH3+RdTpbuJwGImCnCRTAAA8178DAABbXTzSAuMKrc/IAAAAAElFTkSuQmCC"
-      name="Shape7"
-      alt="Shape7"
-      align="bottom"
-      width="602"
-      height="2"
-    />
-  </p>
-  <h3
-    style="
-      line-height: 100%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-      font-size: 13pt;
-      font-weight: bold;
-    "
-  >
-    💬 Need Help or Have Questions?
-  </h3>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    We're just a message away.<br />
-    📧 info@pmatts.in<br />
-    📲 +91-8008107889<br />
-    🌐
-    <a
-      href="http://www.pmatts.com/"
-      target="_new"
-      style="color: #0563c1; text-decoration: underline"
-      >www.pmatts.in</a
-    >
-  </p>
-  <p style="line-height: 108%; margin-bottom: 0in; text-align: left">
-    <img
-      src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAloAAAACCAYAAACAGXJZAAAAJ0lEQVRYhe3OAQkAMAwDsH3+RdTpbuJwGImCnCRTAAA8178DAABbXTzSAuMKrc/IAAAAAElFTkSuQmCC"
-      name="Shape8"
-      alt="Shape8"
-      align="bottom"
-      width="602"
-      height="2"
-    />
-  </p>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    <em
-      >"This is not a pitch. This is a partnership. And we grow with people like
-      you — bold enough to believe early."</em
-    ><br />– <strong>Vinay Kumar Andapally</strong>, Founder &amp; Director
-  </p>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    Welcome again —<br />Let's build impact, income, and India's future
-    together.
-  </p>
-  <p
-    style="
-      line-height: 108%;
-      margin-top: 0.19in;
-      margin-bottom: 0.19in;
-      text-align: left;
-    "
-  >
-    Warm regards,<br /><strong>Team PMatts</strong>
-  </p>
+
+  <h3 style="color: #007BFF;">📈 Your Returns:</h3>
+  <p>Your returns are <strong>milestone-based</strong>, not fixed—just like real business. You'll be updated at each stage of <strong>project monetization and success.</strong> And yes—you’ll always be <strong>first in line for rewards, recognition, and reinvestment rounds.</strong></p>
+
+  <h3 style="color: #007BFF;">💬 Need Help or Have Questions?</h3>
+  <p>We're just a message away!</p>
+  <ul style="list-style: none; padding-left: 0;">
+    <li>📩 <strong>Email:</strong> <a href="mailto:info@pmatts.in" style="color: #007BFF;">info@pmatts.in</a></li>
+    <li>📱 <strong>Phone:</strong> <a href="tel:+918008107889" style="color: #007BFF;">+91-8008107889</a></li>
+    <li>🌐 <strong>Website:</strong> <a href="http://www.pmatts.in" style="color: #007BFF;">www.pmatts.in</a></li>
+  </ul>
+
+  <blockquote style="border-left: 3px solid #007BFF; padding-left: 15px; font-style: italic; color: #555;">
+    "This is not a pitch. This is a partnership. And we grow with people like you—bold enough to believe early."
+    <br><strong>– Vinay Kumar Andapally, Founder & Director</strong>
+  </blockquote>
+
+  <p style="text-align: center; font-weight: bold; color: #007BFF;">✨ Welcome again—Let’s build impact, income, and India's future together! ✨</p>
+
+  <p style="text-align: right;"><strong>Warm regards,</strong><br>Team PMatts</p>
 </div>
 `;
 
