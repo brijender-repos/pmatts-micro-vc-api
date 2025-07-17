@@ -72,7 +72,7 @@ const welcomeEmail = async (req, res) => {
     };
     sendSmtpEmail.to = [{ email: userEmail }];
     sendSmtpEmail.subject =
-      "Welcome to PMatts — You're Now a Founding Community Shareholder 🚀";
+      "Welcome to PMatts — You're Now a Pmatts Community Member 🚀";
     sendSmtpEmail.htmlContent = emailHtml;
 
     apiInstance
