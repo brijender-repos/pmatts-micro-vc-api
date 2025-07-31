@@ -52,7 +52,11 @@ The server will start on `http://localhost:5000` (or the PORT specified in your 
 - `GET /health` - Check API health and connectivity status
 
 ### Payment Routes (`/payment`)
-- Payment processing endpoints
+- `GET /payment/test` - Test payment routes accessibility
+- `POST /payment/payu-payment` - Initiate PayU payment
+- `POST /payment/payment/verify/:txnid` - Verify payment by transaction ID
+- `POST /payment/payu-webhook` - PayU webhook endpoint
+- `POST /payment/payu-transactions` - Sync PayU transactions (Jan 1, 2025 to today)
 
 ### Email Routes (`/email`)
 - `POST /email/send-investment-email` - Send investment emails

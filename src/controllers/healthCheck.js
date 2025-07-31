@@ -13,12 +13,17 @@ const healthCheck = async (req, res) => {
       hasRecaptchaSecret: !!process.env.RECAPTCHA_SECRET_KEY,
     };
 
-    // System information
+    // System information (optimized to prevent memory issues)
+    const memoryUsage = process.memoryUsage();
     const systemInfo = {
       nodeVersion: process.version,
       platform: process.platform,
-      memoryUsage: process.memoryUsage(),
-      uptime: process.uptime(),
+      memoryUsage: {
+        heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024) + ' MB',
+        heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024) + ' MB',
+        external: Math.round(memoryUsage.external / 1024 / 1024) + ' MB',
+      },
+      uptime: Math.round(process.uptime()) + ' seconds',
     };
 
     // API status
@@ -53,24 +58,14 @@ const healthCheck = async (req, res) => {
           environment: Object.values(envStatus).every(Boolean)
             ? 'OK'
             : 'WARNING',
-          memory:
-            systemInfo.memoryUsage.heapUsed < 100 * 1024 * 1024
-              ? 'OK'
-              : 'WARNING', // Less than 100MB
-          uptime: systemInfo.uptime > 0 ? 'OK' : 'ERROR',
+          memory: memoryUsage.heapUsed < 100 * 1024 * 1024 ? 'OK' : 'WARNING', // Less than 100MB
+          uptime: 'OK', // Always OK if server is running
         },
       },
     };
 
-    // Set appropriate status code
-    const hasWarnings = Object.values(healthResponse.data.checks).some(
-      (check) => check === 'WARNING'
-    );
-    const hasErrors = Object.values(healthResponse.data.checks).some(
-      (check) => check === 'ERROR'
-    );
-
-    const statusCode = hasErrors ? 503 : hasWarnings ? 200 : 200;
+    // Set appropriate status code - Always return 200 for health check
+    const statusCode = 200;
 
     res.status(statusCode).json(healthResponse);
   } catch (error) {

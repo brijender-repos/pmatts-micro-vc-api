@@ -16,7 +16,7 @@ app.use(
     origin: '*',
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // Limit request body size
 
 // Routes
 app.use('/health', healthRoutes);
@@ -24,6 +24,28 @@ app.use('/payment', paymentRoutes);
 app.use('/email', emailRoutes);
 app.use('/auth', smsRouter);
 app.use('/recaptcha', recaptchaRoutes);
+
+// Global error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Global error handler:', err);
+  res.status(500).json({
+    success: false,
+    error: 'Internal server error',
+    message:
+      process.env.NODE_ENV === 'development'
+        ? err.message
+        : 'Something went wrong',
+  });
+});
+
+// 404 handler for undefined routes
+app.use('*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    error: 'Route not found',
+    message: `Cannot ${req.method} ${req.originalUrl}`,
+  });
+});
 
 app.listen(port, () => {
   console.log(`App is running at PORT: http://localhost:${port}`);

@@ -47,33 +47,52 @@ const sendContactUsEmail = async (req, res) => {
       });
     }
 
-    // Create a mock request and response for reCAPTCHA validation
-    const mockReq = { body: { recaptchaToken } };
-    let recaptchaValidationPassed = false;
-    const mockRes = {
-      status: (code) => ({
-        json: (data) => {
-          if (code === 200) {
-            recaptchaValidationPassed = true;
-          } else {
-            // If reCAPTCHA validation fails, send error response
-            res.status(400).json({
-              success: false,
-              error: data.error || 'reCAPTCHA verification failed-Email API',
-            });
-          }
-          return null;
+    // Verify reCAPTCHA token with Google
+    const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+    if (!secretKey) {
+      console.error('RECAPTCHA_SECRET_KEY environment variable is not set');
+      return res.status(500).json({
+        success: false,
+        error: 'Server configuration error',
+      });
+    }
+
+    try {
+      const verificationUrl = 'https://www.google.com/recaptcha/api/siteverify';
+      const response = await axios.post(verificationUrl, null, {
+        params: {
+          secret: secretKey,
+          response: recaptchaToken,
         },
-      }),
-    };
+      });
 
-    // Validate reCAPTCHA
-    //await validateRecaptchaToken(mockReq, mockRes);
+      const { success, score, action } = response.data;
 
-    // If reCAPTCHA validation failed, return early
-    // if (!recaptchaValidationPassed) {
-    //   return;
-    // }
+      if (!success) {
+        return res.status(400).json({
+          success: false,
+          error: 'reCAPTCHA verification failed',
+          details: response.data['error-codes'] || [],
+        });
+      }
+
+      // Optional: Check score for v3 reCAPTCHA
+      if (score !== undefined && score < 0.5) {
+        return res.status(400).json({
+          success: false,
+          error: 'reCAPTCHA score too low',
+          score: score,
+        });
+      }
+
+      console.log('reCAPTCHA verification successful:', { score, action });
+    } catch (recaptchaError) {
+      console.error('reCAPTCHA verification error:', recaptchaError.message);
+      return res.status(500).json({
+        success: false,
+        error: 'Server error during reCAPTCHA verification',
+      });
+    }
 
     // Get backoffice emails from environment variables
     const backofficeEmails = process.env.BACKOFFICE_EMAILS;

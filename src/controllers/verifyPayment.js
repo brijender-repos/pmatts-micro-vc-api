@@ -27,16 +27,16 @@ exports.verifyPayment = async (req, res) => {
     }
 
     const paymentStatus =
-      data.status === 'success'
+      data.status === 'captured'
         ? 'success'
-        : data.status === 'failure'
-        ? 'failure'
-        : data.status === 'cancelled'
-        ? 'cancelled'
-        : 'pending';
+        : data.status === 'failed'
+          ? 'failure'
+          : data.status === 'userCancelled'
+            ? 'cancelled'
+            : 'pending';
 
     const transactionMode = data.mode || null;
-    const payUReferenceId = data.mihpayid || null;
+    const payUReferenceId = data.id || null;
 
     const { data: transactionData, error: txnError } = await supabase
       .from('transactions')
