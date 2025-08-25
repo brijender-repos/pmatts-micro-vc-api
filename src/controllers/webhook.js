@@ -12,14 +12,15 @@ exports.payuWebhook = async (req, res) => {
     }
 
     const paymentStatus =
-      transaction.status === 'captured'
+      status === 'captured'
         ? 'success'
-        : transaction.status === 'failed'
+        : status === 'failed'
           ? 'failure'
-          : transaction.status === 'userCancelled'
+          : status === 'userCancelled'
             ? 'cancelled'
             : 'pending';
 
+    // Update transaction using combination of txnid and payureference_id for uniqueness
     const { error } = await supabase
       .from('transactions')
       .update({
@@ -27,7 +28,8 @@ exports.payuWebhook = async (req, res) => {
         transaction_mode: mode || null,
         payureference_id: mihpayid || null,
       })
-      .eq('txnid', txnid);
+      .eq('txnid', txnid)
+      .eq('payureference_id', mihpayid);
 
     if (error) {
       console.error('Failed to update transaction:', error);

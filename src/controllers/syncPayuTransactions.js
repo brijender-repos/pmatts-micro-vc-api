@@ -168,11 +168,12 @@ exports.syncPayuTransactions = async (req, res) => {
           last_synced_on: new Date().toISOString(),
         };
 
-        // Check if transaction already exists
+        // Check if transaction already exists using combination of txnid and payureference_id
         const { data: existingTransaction, error: checkError } = await supabase
           .from('transactions')
-          .select('id, txnid')
+          .select('id, txnid, payureference_id, status')
           .eq('txnid', transaction.txnid)
+          .eq('payureference_id', transaction.id)
           .single();
 
         if (checkError && checkError.code !== 'PGRST116') {
@@ -183,18 +184,38 @@ exports.syncPayuTransactions = async (req, res) => {
         }
 
         if (existingTransaction) {
-          // Update existing transaction
-          const { error: updateError } = await supabase
-            .from('transactions')
-            .update(transactionData)
-            .eq('txnid', transaction.txnid);
+          // Update existing transaction only if status is different or if this is a more recent update
+          const shouldUpdate =
+            existingTransaction.status !== paymentStatus ||
+            existingTransaction.payureference_id !== transaction.id;
 
-          if (updateError) {
-            console.error('Error updating transaction:', updateError);
-            errorCount++;
+          if (shouldUpdate) {
+            const { error: updateError } = await supabase
+              .from('transactions')
+              .update(transactionData)
+              .eq('txnid', transaction.txnid)
+              .eq('payureference_id', transaction.id);
+
+            if (updateError) {
+              console.error('Error updating transaction:', updateError);
+              errorCount++;
+            } else {
+              updatedCount++;
+              console.log(
+                'Updated transaction:',
+                transaction.txnid,
+                'with payureference_id:',
+                transaction.id
+              );
+            }
           } else {
+            console.log(
+              'Transaction already exists with same status:',
+              transaction.txnid,
+              'with payureference_id:',
+              transaction.id
+            );
             updatedCount++;
-            console.log('Updated transaction:', transaction.txnid);
           }
         } else {
           // Insert new transaction
@@ -207,7 +228,12 @@ exports.syncPayuTransactions = async (req, res) => {
             errorCount++;
           } else {
             syncedCount++;
-            console.log('Inserted new transaction:', transaction.txnid);
+            console.log(
+              'Inserted new transaction:',
+              transaction.txnid,
+              'with payureference_id:',
+              transaction.id
+            );
           }
         }
       } catch (error) {
@@ -234,6 +260,16 @@ exports.syncPayuTransactions = async (req, res) => {
     // Filter only successful transactions (status = 'captured') = success
     const successfulTransactions = fetchedTransactions.filter(
       (txn) => txn.status === 'captured'
+    );
+
+    // Clean up investments for failed transactions
+    console.log('Cleaning up investments for failed transactions...');
+    const failedTransactions = fetchedTransactions.filter(
+      (txn) =>
+        txn.status === 'failed' ||
+        txn.status === 'userCancelled' ||
+        txn.status === 'refunded' ||
+        txn.status === 'bounced'
     );
 
     for (const transaction of successfulTransactions) {
@@ -280,52 +316,107 @@ exports.syncPayuTransactions = async (req, res) => {
           updated_at: new Date().toISOString(),
         };
 
-        // Check if investment already exists for this txnid
+        console.log(
+          'Processing investment for txnid:',
+          transaction.txnid,
+          'transaction_id:',
+          transaction.id,
+          'user_id:',
+          userData.user_id,
+          'project_id:',
+          projectData.id
+        );
+
+        // Check if investment already exists for this txnid and transaction_id combination
         const { data: existingInvestment, error: checkError } =
           await supabaseAdmin
             .from('investments')
-            .select('id, txnid')
+            .select('id, txnid, transaction_id')
             .eq('txnid', transaction.txnid)
+            //.eq('transaction_id', transaction.id)
             .maybeSingle(); // Use maybeSingle() instead of single()
 
         if (checkError && checkError.code !== 'PGRST116') {
-          console.error('Error checking existing investment:', checkError);
+          console.error(
+            'Error checking existing investment for txnid:',
+            transaction.txnid,
+            'transaction_id:',
+            transaction.id,
+            'Error:',
+            checkError
+          );
           investmentErrors++;
           continue;
         }
 
         if (existingInvestment) {
+          console.log(
+            'Found existing investment for txnid:',
+            transaction.txnid,
+            'transaction_id:',
+            transaction.id,
+            'investment_id:',
+            existingInvestment.id
+          );
           // Update existing investment
           const { error: updateError } = await supabaseAdmin
             .from('investments')
             .update(investmentData)
             .eq('txnid', transaction.txnid);
+          //.eq('transaction_id', transaction.id);
 
           if (updateError) {
-            console.error('Error updating investment:', updateError);
+            console.error(
+              'Error updating investment for txnid:',
+              transaction.txnid,
+              'transaction_id:',
+              transaction.id,
+              'Error:',
+              updateError
+            );
             investmentErrors++;
           } else {
             investmentUpdates++;
-            console.log('Updated investment for txnid:', transaction.txnid);
+            console.log(
+              'Updated investment for txnid:',
+              transaction.txnid,
+              'with transaction_id:',
+              transaction.id
+            );
+          }
+        } else {
+          console.log(
+            'No existing investment found for txnid:',
+            transaction.txnid,
+            'transaction_id:',
+            transaction.id,
+            '- creating new investment'
+          );
+          // Insert new investment for successful transactions
+          const { error: insertError } = await supabaseAdmin
+            .from('investments')
+            .insert(investmentData);
+
+          if (insertError) {
+            console.error(
+              'Error inserting investment for txnid:',
+              transaction.txnid,
+              'transaction_id:',
+              transaction.id,
+              'Error:',
+              insertError
+            );
+            investmentErrors++;
+          } else {
+            investmentUpdates++;
+            console.log(
+              'Inserted new investment for txnid:',
+              transaction.txnid,
+              'with transaction_id:',
+              transaction.id
+            );
           }
         }
-        //  else {
-        //   // Insert new investment
-        //   const { error: insertError } = await supabase
-        //     .from('investments')
-        //     .insert(investmentData);
-
-        //   if (insertError) {
-        //     console.error('Error inserting investment:', insertError);
-        //     investmentErrors++;
-        //   } else {
-        //     investmentUpdates++;
-        //     console.log(
-        //       'Inserted new investment for txnid:',
-        //       transaction.txnid
-        //     );
-        //   }
-        // }
       } catch (error) {
         console.error(
           'Error processing investment for txnid:',
