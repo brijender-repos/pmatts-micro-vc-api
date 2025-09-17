@@ -84,6 +84,6 @@ exports.verifyPayment = async (req, res) => {
     res.redirect(`${clientUrl}/payment/${paymentStatus}`);
   } catch (error) {
     console.error("Payment verification error:", error);
-    res.redirect("https://pmatts.com/payment/failure");
+    res.redirect("https://fin-pmatts.com/payment/failure");
   }
 };

@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'https://api.pmatts.com';
+const BASE_URL = 'https://api.fin-pmatts.com';
 
 async function testAPI() {
   console.log('🧪 Testing PMatts API endpoints...\n');
